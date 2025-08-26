@@ -1,7 +1,7 @@
 name: Android APK Build (Debug)
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   push:
     branches: [ main ]
 
@@ -23,8 +23,24 @@ jobs:
         with:
           channel: stable
 
-      - name: Flutter pub get
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Pub get
         run: flutter pub get
+
+      # 🔽 İkonları oluşturma adımı
+      - name: Generate App Icons
+        run: flutter pub run flutter_launcher_icons:main
+
+      - name: Ensure android project
+        run: flutter create . --platforms=android
+
+      - name: Clean
+        run: flutter clean
 
       - name: Build APK (debug)
         run: flutter build apk --debug
